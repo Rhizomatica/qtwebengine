@@ -26,6 +26,5 @@ armhf-no-thumb.patch
 disable-catapult.patch
 pipewire-0.3.patch
 ffmpeg-remove-x86-optimization.patch
-gcc-13.patch
 optimize-size.patch
 mipsel-no-icf.patch
