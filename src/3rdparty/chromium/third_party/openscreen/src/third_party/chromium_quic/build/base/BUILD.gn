@@ -427,8 +427,6 @@ source_set("base") {
     "../../src/base/test/fuzzed_data_provider.cc",
     "../../src/base/test/fuzzed_data_provider.h",
     "../../src/base/third_party/dynamic_annotations/dynamic_annotations.h",
-    "../../src/base/third_party/icu/icu_utf.cc",
-    "../../src/base/third_party/icu/icu_utf.h",
     "../../src/base/third_party/nspr/prtime.cc",
     "../../src/base/third_party/nspr/prtime.h",
     "../../src/base/third_party/superfasthash/superfasthash.c",

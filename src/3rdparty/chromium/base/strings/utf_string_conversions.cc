@@ -12,7 +12,7 @@
 #include "base/strings/string_piece.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversion_utils.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #include "build/build_config.h"
 
 #if defined(OS_MAC)
@@ -79,12 +79,12 @@ using EnableIfBitsAre = std::enable_if_t<std::is_integral<Char>::value &&
 
 template <typename Char, EnableIfBitsAre<Char, 8> = true>
 void UnicodeAppendUnsafe(Char* out, int32_t* size, uint32_t code_point) {
-  CBU8_APPEND_UNSAFE(out, *size, code_point);
+  U8_APPEND_UNSAFE(out, *size, code_point);
 }
 
 template <typename Char, EnableIfBitsAre<Char, 16> = true>
 void UnicodeAppendUnsafe(Char* out, int32_t* size, uint32_t code_point) {
-  CBU16_APPEND_UNSAFE(out, *size, code_point);
+  U16_APPEND_UNSAFE(out, *size, code_point);
 }
 
 template <typename Char, EnableIfBitsAre<Char, 32> = true>
@@ -105,7 +105,7 @@ bool DoUTFConversion(const char* src,
 
   for (int32_t i = 0; i < src_len;) {
     int32_t code_point;
-    CBU8_NEXT(src, i, src_len, code_point);
+    U8_NEXT(src, i, src_len, code_point);
 
     if (!IsValidCodepoint(code_point)) {
       success = false;
@@ -126,7 +126,7 @@ bool DoUTFConversion(const char16* src,
   bool success = true;
 
   auto ConvertSingleChar = [&success](char16 in) -> int32_t {
-    if (!CBU16_IS_SINGLE(in) || !IsValidCodepoint(in)) {
+    if (!U16_IS_SINGLE(in) || !IsValidCodepoint(in)) {
       success = false;
       return kErrorCodePoint;
     }
@@ -140,8 +140,8 @@ bool DoUTFConversion(const char16* src,
   while (i < src_len - 1) {
     int32_t code_point;
 
-    if (CBU16_IS_LEAD(src[i]) && CBU16_IS_TRAIL(src[i + 1])) {
-      code_point = CBU16_GET_SUPPLEMENTARY(src[i], src[i + 1]);
+    if (U16_IS_LEAD(src[i]) && U16_IS_TRAIL(src[i + 1])) {
+      code_point = U16_GET_SUPPLEMENTARY(src[i], src[i + 1]);
       if (!IsValidCodepoint(code_point)) {
         code_point = kErrorCodePoint;
         success = false;

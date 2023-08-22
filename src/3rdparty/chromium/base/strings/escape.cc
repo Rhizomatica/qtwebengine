@@ -6,7 +6,7 @@
 
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversion_utils.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 
 namespace base {
 
@@ -83,14 +83,14 @@ bool UnescapeUTF8CharacterAtIndex(StringPiece escaped_text,
                                   std::string* unescaped_out) {
   DCHECK(unescaped_out->empty());
 
-  unsigned char bytes[CBU8_MAX_LENGTH];
+  unsigned char bytes[U8_MAX_LENGTH];
   if (!UnescapeUnsignedByteAtIndex(escaped_text, index, &bytes[0]))
     return false;
 
   size_t num_bytes = 1;
 
   // If this is a lead byte, need to collect trail bytes as well.
-  if (CBU8_IS_LEAD(bytes[0])) {
+  if (U8_IS_LEAD(bytes[0])) {
     // Look for the last trail byte of the UTF-8 character.  Give up once
     // reach max character length number of bytes, or hit an unescaped
     // character. No need to check length of escaped_text, as
@@ -98,7 +98,7 @@ bool UnescapeUTF8CharacterAtIndex(StringPiece escaped_text,
     while (num_bytes < size(bytes) &&
            UnescapeUnsignedByteAtIndex(escaped_text, index + num_bytes * 3,
                                        &bytes[num_bytes]) &&
-           CBU8_IS_TRAIL(bytes[num_bytes])) {
+           U8_IS_TRAIL(bytes[num_bytes])) {
       ++num_bytes;
     }
   }

@@ -9,7 +9,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversion_utils.h"
 #include "base/strings/utf_string_conversions.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 
 namespace net {
 

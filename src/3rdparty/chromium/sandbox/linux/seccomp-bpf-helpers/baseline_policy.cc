@@ -201,6 +201,11 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
   if (sysno == __NR_futex)
     return RestrictFutex();
 
+#if defined(__NR_futex_time64)
+  if (sysno == __NR_futex_time64)
+    return RestrictFutex();
+#endif
+
   if (sysno == __NR_set_robust_list)
     return Error(EPERM);
 

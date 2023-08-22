@@ -114,6 +114,12 @@
                 "-ljpeg"
             ]
         },
+        "webengine-openjpeg2": {
+            "label": "OpenJPEG 2",
+            "sources": [
+                { "type": "pkgConfig", "args": "libopenjp2" }
+            ]
+        },
         "webengine-libevent": {
             "label": "libevent",
             "sources": [
@@ -295,9 +301,9 @@
             "label": "system ninja",
             "type": "detectNinja"
         },
-        "webengine-python2": {
-            "label": "python2",
-            "type": "detectPython2",
+        "webengine-python3": {
+            "label": "python3",
+            "type": "detectPython3",
             "log": "location"
         },
         "webengine-winversion": {
@@ -374,7 +380,7 @@
                          && features.webengine-gperf
                          && features.webengine-bison
                          && features.webengine-flex
-                         && features.webengine-python2
+                         && features.webengine-python3
                          && features.webengine-nodejs
                          && (!config.sanitizer || features.webengine-sanitizer)
                          && (!config.linux || features.pkg-config)
@@ -400,7 +406,7 @@
                          && features.webengine-gperf
                          && features.webengine-bison
                          && features.webengine-flex
-                         && features.webengine-python2
+                         && features.webengine-python3
                          && (!config.sanitizer || features.webengine-sanitizer)
                          && (!config.linux || features.pkg-config)
                          && (!config.linux || features.webengine-host-pkg-config)
@@ -423,12 +429,12 @@
             "autoDetect": "features.private_tests",
             "output": [ "privateFeature" ]
         },
-        "webengine-python2": {
-            "label": "python2",
-            "condition": "tests.webengine-python2",
+        "webengine-python3": {
+            "label": "python3",
+            "condition": "tests.webengine-python3",
             "output": [
                 "privateFeature",
-                { "type": "varAssign", "name": "QMAKE_PYTHON2", "value": "tests.webengine-python2.location" }
+                { "type": "varAssign", "name": "QMAKE_PYTHON3", "value": "tests.webengine-python3.location" }
             ]
         },
         "webengine-gperf": {
@@ -609,6 +615,11 @@
         "webengine-system-jpeg" : {
             "label": "JPEG",
             "condition": "config.unix && features.system-jpeg && libs.webengine-jpeglib",
+            "output": [ "privateFeature" ]
+        },
+        "webengine-system-openjpeg2" : {
+            "label": "OpenJPEG 2",
+            "condition": "config.unix && libs.webengine-openjpeg2",
             "output": [ "privateFeature" ]
         },
         "webengine-qt-jpeg" : {
@@ -819,6 +830,7 @@
                         "webengine-system-lcms2",
                         "webengine-system-png",
                         "webengine-system-jpeg",
+                        "webengine-system-openjpeg2",
                         "webengine-system-harfbuzz",
                         "webengine-system-freetype"
                      ]

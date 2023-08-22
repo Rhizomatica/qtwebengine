@@ -43,6 +43,9 @@ source_set("transport_security_state_generator_test_sources") {
     "//testing/gtest",
     "//third_party/boringssl",
   ]
+  libs = [
+    "icuuc",
+  ]
 }
 
 executable("transport_security_state_generator") {

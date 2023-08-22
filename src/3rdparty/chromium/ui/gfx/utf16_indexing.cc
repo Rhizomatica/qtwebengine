@@ -5,13 +5,13 @@
 #include "ui/gfx/utf16_indexing.h"
 
 #include "base/check_op.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 
 namespace gfx {
 
 bool IsValidCodePointIndex(const base::string16& s, size_t index) {
   return index == 0 || index == s.length() ||
-    !(CBU16_IS_TRAIL(s[index]) && CBU16_IS_LEAD(s[index - 1]));
+    !(U16_IS_TRAIL(s[index]) && U16_IS_LEAD(s[index - 1]));
 }
 
 ptrdiff_t UTF16IndexToOffset(const base::string16& s, size_t base, size_t pos) {

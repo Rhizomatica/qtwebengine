@@ -33,7 +33,7 @@ build_pass|!debug_and_release {
             !system("$$pythonPathForSystem() $$gn_configure") {
                 error("GN generation error!")
             }
-            !system("cd $$system_quote($$system_path($$out_path)) && $$ninja_path $$basename(out)" ) {
+            !system("cd $$system_quote($$system_path($$out_path)) && $$ninja_path -v $$(NINJAJOBS) $$basename(out)" ) {
                 error("GN build error!")
             }
         }

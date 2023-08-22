@@ -19,7 +19,7 @@
 
 #if defined(OS_APPLE)
 #include "base/mac/scoped_cftyperef.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #endif
 
 #if defined(OS_WIN)
@@ -1167,9 +1167,9 @@ inline int HFSReadNextNonIgnorableCodepoint(const char* string,
                                             int* index) {
   int codepoint = 0;
   while (*index < length && codepoint == 0) {
-    // CBU8_NEXT returns a value < 0 in error cases. For purposes of string
+    // U8_NEXT returns a value < 0 in error cases. For purposes of string
     // comparison, we just use that value and flag it with DCHECK.
-    CBU8_NEXT(string, *index, length, codepoint);
+    U8_NEXT(string, *index, length, codepoint);
     DCHECK_GT(codepoint, 0);
     if (codepoint > 0) {
       // Check if there is a subtable for this upper byte.

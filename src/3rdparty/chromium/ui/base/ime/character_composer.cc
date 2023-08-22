@@ -13,7 +13,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversion_utils.h"
 #include "base/strings/utf_string_conversions.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #include "ui/events/event.h"
 #include "ui/events/keycodes/dom/dom_key.h"
 #include "ui/events/keycodes/dom/keycode_converter.h"
@@ -37,12 +37,12 @@ bool CheckCharacterComposeTable(
 bool UTF32CharacterToUTF16(uint32_t character, base::string16* output) {
   output->clear();
   // Reject invalid character. (e.g. codepoint greater than 0x10ffff)
-  if (!CBU_IS_UNICODE_CHAR(character))
+  if (!U_IS_UNICODE_CHAR(character))
     return false;
   if (character) {
-    output->resize(CBU16_LENGTH(character));
+    output->resize(U16_LENGTH(character));
     size_t i = 0;
-    CBU16_APPEND_UNSAFE(&(*output)[0], i, character);
+    U16_APPEND_UNSAFE(&(*output)[0], i, character);
   }
   return true;
 }

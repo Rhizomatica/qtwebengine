@@ -19,7 +19,7 @@
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversion_utils.h"
 #include "base/strings/utf_string_conversions.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 
 namespace base {
 namespace internal {
@@ -639,9 +639,9 @@ bool JSONParser::DecodeUTF16(uint32_t* out_code_point) {
 
   // If this is a high surrogate, consume the next code unit to get the
   // low surrogate.
-  if (CBU16_IS_SURROGATE(code_unit16_high)) {
+  if (U16_IS_SURROGATE(code_unit16_high)) {
     // Make sure this is the high surrogate.
-    if (!CBU16_IS_SURROGATE_LEAD(code_unit16_high)) {
+    if (!U16_IS_SURROGATE_LEAD(code_unit16_high)) {
       if ((options_ & JSON_REPLACE_INVALID_CHARACTERS) == 0)
         return false;
       *out_code_point = kUnicodeReplacementPoint;
@@ -665,7 +665,7 @@ bool JSONParser::DecodeUTF16(uint32_t* out_code_point) {
     if (!UnprefixedHexStringToInt(*escape_sequence, &code_unit16_low))
       return false;
 
-    if (!CBU16_IS_TRAIL(code_unit16_low)) {
+    if (!U16_IS_TRAIL(code_unit16_low)) {
       if ((options_ & JSON_REPLACE_INVALID_CHARACTERS) == 0)
         return false;
       *out_code_point = kUnicodeReplacementPoint;
@@ -673,12 +673,12 @@ bool JSONParser::DecodeUTF16(uint32_t* out_code_point) {
     }
 
     uint32_t code_point =
-        CBU16_GET_SUPPLEMENTARY(code_unit16_high, code_unit16_low);
+        U16_GET_SUPPLEMENTARY(code_unit16_high, code_unit16_low);
 
     *out_code_point = code_point;
   } else {
     // Not a surrogate.
-    DCHECK(CBU16_IS_SINGLE(code_unit16_high));
+    DCHECK(U16_IS_SINGLE(code_unit16_high));
 
     *out_code_point = code_unit16_high;
   }

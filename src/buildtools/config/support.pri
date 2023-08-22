@@ -21,7 +21,7 @@ defineReplace(qtwebengine_checkWebEngineCoreError) {
     !qtwebengine_checkForGperf(QtWebEngine):return(false)
     !qtwebengine_checkForBison(QtWebEngine):return(false)
     !qtwebengine_checkForFlex(QtWebEngine):return(false)
-    !qtwebengine_checkForPython2(QtWebEngine):return(false)
+    !qtwebengine_checkForPython3(QtWebEngine):return(false)
     !qtwebengine_checkForNodejs(QtWebEngine):return(false)
     !qtwebengine_checkForSanitizer(QtWebEngine):return(false)
     linux:!qtwebengine_checkForPkgCfg(QtWebEngine):return(false)
@@ -51,7 +51,7 @@ defineReplace(qtwebengine_checkPdfError) {
     !qtwebengine_checkForGperf(QtPdf):return(false)
     !qtwebengine_checkForBison(QtPdf):return(false)
     !qtwebengine_checkForFlex(QtPdf):return(false)
-    !qtwebengine_checkForPython2(QtPdf):return(false)
+    !qtwebengine_checkForPython3(QtPdf):return(false)
     !qtwebengine_checkForSanitizer(QtPdf):return(false)
     linux:!qtwebengine_checkForPkgCfg(QtPdf):return(false)
     linux:!qtwebengine_checkForHostPkgCfg(QtPdf):return(false)
@@ -143,10 +143,10 @@ defineTest(qtwebengine_checkForFlex) {
     return(true)
 }
 
-defineTest(qtwebengine_checkForPython2) {
+defineTest(qtwebengine_checkForPython3) {
     module = $$1
-    !qtConfig(webengine-python2) {
-        qtwebengine_skipBuild("Python version 2 (2.7.5 or later) is required to build $${module}.")
+    !qtConfig(webengine-python3) {
+        qtwebengine_skipBuild("Python version 3 is required to build $${module}.")
         return(false)
     }
     return(true)

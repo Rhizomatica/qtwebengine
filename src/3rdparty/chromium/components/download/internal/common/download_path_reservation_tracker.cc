@@ -23,7 +23,7 @@
 #include "base/task/lazy_thread_pool_task_runner.h"
 #include "base/task/post_task.h"
 #include "base/task_runner_util.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #include "base/time/time.h"
 #include "build/build_config.h"
 #include "components/download/public/common/download_features.h"

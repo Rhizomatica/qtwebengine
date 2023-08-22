@@ -14,7 +14,7 @@
 #include "base/optional.h"
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
-#include "base/third_party/nspr/prtime.h"
+#include <nspr/prtime.h>
 #include "base/time/time_override.h"
 #include "build/build_config.h"
 

@@ -38,6 +38,4 @@ group("extension_docserver_python_unittests") {
     "//tools/json_comment_eater/json_comment_eater.py",
     "//tools/json_schema_compiler/",
   ]
-
-  data_deps = [ "//third_party/catapult/third_party/typ" ]
 }

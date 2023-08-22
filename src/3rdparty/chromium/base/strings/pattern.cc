@@ -4,13 +4,13 @@
 
 #include "base/strings/pattern.h"
 
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 
 namespace base {
 
 namespace {
 
-constexpr bool IsWildcard(base_icu::UChar32 character) {
+constexpr bool IsWildcard(UChar32 character) {
   return character == '*' || character == '?';
 }
 
@@ -55,9 +55,9 @@ constexpr bool SearchForChars(const CHAR** pattern,
       // Check if the chars match, if so, increment the ptrs.
       const CHAR* pattern_next = *pattern;
       const CHAR* string_next = *string;
-      base_icu::UChar32 pattern_char = next(&pattern_next, pattern_end);
+      UChar32 pattern_char = next(&pattern_next, pattern_end);
       if (pattern_char == next(&string_next, string_end) &&
-          pattern_char != CBU_SENTINEL) {
+          pattern_char != U_SENTINEL) {
         *pattern = pattern_next;
         *string = string_next;
         continue;
@@ -121,20 +121,20 @@ constexpr bool MatchPatternT(const CHAR* eval,
 }
 
 struct NextCharUTF8 {
-  base_icu::UChar32 operator()(const char** p, const char* end) {
-    base_icu::UChar32 c;
+  UChar32 operator()(const char** p, const char* end) {
+    UChar32 c;
     int offset = 0;
-    CBU8_NEXT(*p, offset, end - *p, c);
+    U8_NEXT(*p, offset, end - *p, c);
     *p += offset;
     return c;
   }
 };
 
 struct NextCharUTF16 {
-  base_icu::UChar32 operator()(const char16** p, const char16* end) {
-    base_icu::UChar32 c;
+  UChar32 operator()(const char16** p, const char16* end) {
+    UChar32 c;
     int offset = 0;
-    CBU16_NEXT(*p, offset, end - *p, c);
+    U16_NEXT(*p, offset, end - *p, c);
     *p += offset;
     return c;
   }

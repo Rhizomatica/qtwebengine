@@ -27,7 +27,7 @@
 #include "base/strings/string_util_internal.h"
 #include "base/strings/utf_string_conversion_utils.h"
 #include "base/strings/utf_string_conversions.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #include "build/build_config.h"
 
 namespace base {
@@ -173,19 +173,19 @@ void TruncateUTF8ToByteSize(const std::string& input,
   }
   DCHECK_LE(byte_size,
             static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
-  // Note: This cast is necessary because CBU8_NEXT uses int32_ts.
+  // Note: This cast is necessary because U8_NEXT uses int32_ts.
   int32_t truncation_length = static_cast<int32_t>(byte_size);
   int32_t char_index = truncation_length - 1;
   const char* data = input.data();
 
-  // Using CBU8, we will move backwards from the truncation point
+  // Using U8, we will move backwards from the truncation point
   // to the beginning of the string looking for a valid UTF8
   // character.  Once a full UTF8 character is found, we will
   // truncate the string to the end of that character.
   while (char_index >= 0) {
     int32_t prev = char_index;
-    base_icu::UChar32 code_point = 0;
-    CBU8_NEXT(data, char_index, truncation_length, code_point);
+    UChar32 code_point = 0;
+    U8_NEXT(data, char_index, truncation_length, code_point);
     if (!IsValidCharacter(code_point) ||
         !IsValidCodepoint(code_point)) {
       char_index = prev - 1;

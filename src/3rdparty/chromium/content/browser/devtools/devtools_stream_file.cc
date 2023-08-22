@@ -10,7 +10,7 @@
 #include "base/sequenced_task_runner.h"
 #include "base/strings/string_util.h"
 #include "base/task/lazy_thread_pool_task_runner.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "storage/browser/file_system/file_system_context.h"
@@ -104,7 +104,7 @@ void DevToolsStreamFile::ReadOnFileSequence(off_t position,
     } else {
       // Provided client has requested sufficient large block, make their
       // life easier by not truncating in the middle of a UTF-8 character.
-      if (size_got > 6 && !CBU8_IS_SINGLE(buffer[size_got - 1])) {
+      if (size_got > 6 && !U8_IS_SINGLE(buffer[size_got - 1])) {
         base::TruncateUTF8ToByteSize(buffer, size_got, &buffer);
         size_got = buffer.size();
       } else {

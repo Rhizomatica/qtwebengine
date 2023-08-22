@@ -11,7 +11,7 @@
 #include "base/strings/utf_string_conversion_utils.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/sys_byteorder.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 
 namespace net {
 
@@ -36,7 +36,7 @@ bool ConvertBmpStringValue(const der::Input& in, std::string* out) {
 
     // BMPString only supports codepoints in the Basic Multilingual Plane;
     // surrogates are not allowed.
-    if (CBU_IS_SURROGATE(c))
+    if (U_IS_SURROGATE(c))
       return false;
   }
   return base::UTF16ToUTF8(in_16bit.data(), in_16bit.size(), out);
@@ -56,7 +56,7 @@ bool ConvertUniversalStringValue(const der::Input& in, std::string* out) {
   for (const uint32_t c : in_32bit) {
     // UniversalString is UCS-4 in big-endian order.
     uint32_t codepoint = base::NetToHost32(c);
-    if (!CBU_IS_UNICODE_CHAR(codepoint))
+    if (!U_IS_UNICODE_CHAR(codepoint))
       return false;
 
     base::WriteUnicodeCharacter(codepoint, out);

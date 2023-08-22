@@ -164,6 +164,11 @@ host_build {
     } else {
         gn_args += use_system_libjpeg=false
     }
+    qtConfig(webengine-system-openjpeg2) {
+        gn_args += use_system_libopenjpeg2=true
+    } else {
+        gn_args += use_system_libopenjpeg2=false
+    }
     qtConfig(webengine-system-freetype) {
         gn_args += use_system_freetype=true
     } else {

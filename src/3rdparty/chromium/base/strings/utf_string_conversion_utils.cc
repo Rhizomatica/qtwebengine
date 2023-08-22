@@ -4,7 +4,7 @@
 
 #include "base/strings/utf_string_conversion_utils.h"
 
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #include "build/build_config.h"
 
 namespace base {
@@ -19,7 +19,7 @@ bool ReadUnicodeCharacter(const char* src,
   // use a signed type for code_point.  But this function returns false
   // on error anyway, so code_point_out is unsigned.
   int32_t code_point;
-  CBU8_NEXT(src, *char_index, src_len, code_point);
+  U8_NEXT(src, *char_index, src_len, code_point);
   *code_point_out = static_cast<uint32_t>(code_point);
 
   // The ICU macro above moves to the next char, we want to point to the last
@@ -34,16 +34,16 @@ bool ReadUnicodeCharacter(const char16* src,
                           int32_t src_len,
                           int32_t* char_index,
                           uint32_t* code_point) {
-  if (CBU16_IS_SURROGATE(src[*char_index])) {
-    if (!CBU16_IS_SURROGATE_LEAD(src[*char_index]) ||
+  if (U16_IS_SURROGATE(src[*char_index])) {
+    if (!U16_IS_SURROGATE_LEAD(src[*char_index]) ||
         *char_index + 1 >= src_len ||
-        !CBU16_IS_TRAIL(src[*char_index + 1])) {
+        !U16_IS_TRAIL(src[*char_index + 1])) {
       // Invalid surrogate pair.
       return false;
     }
 
     // Valid surrogate pair.
-    *code_point = CBU16_GET_SUPPLEMENTARY(src[*char_index],
+    *code_point = U16_GET_SUPPLEMENTARY(src[*char_index],
                                           src[*char_index + 1]);
     (*char_index)++;
   } else {
@@ -77,30 +77,30 @@ size_t WriteUnicodeCharacter(uint32_t code_point, std::string* output) {
   }
 
 
-  // CBU8_APPEND_UNSAFE can append up to 4 bytes.
+  // U8_APPEND_UNSAFE can append up to 4 bytes.
   size_t char_offset = output->length();
   size_t original_char_offset = char_offset;
-  output->resize(char_offset + CBU8_MAX_LENGTH);
+  output->resize(char_offset + U8_MAX_LENGTH);
 
-  CBU8_APPEND_UNSAFE(&(*output)[0], char_offset, code_point);
+  U8_APPEND_UNSAFE(&(*output)[0], char_offset, code_point);
 
-  // CBU8_APPEND_UNSAFE will advance our pointer past the inserted character, so
+  // U8_APPEND_UNSAFE will advance our pointer past the inserted character, so
   // it will represent the new length of the string.
   output->resize(char_offset);
   return char_offset - original_char_offset;
 }
 
 size_t WriteUnicodeCharacter(uint32_t code_point, string16* output) {
-  if (CBU16_LENGTH(code_point) == 1) {
+  if (U16_LENGTH(code_point) == 1) {
     // Thie code point is in the Basic Multilingual Plane (BMP).
     output->push_back(static_cast<char16>(code_point));
     return 1;
   }
   // Non-BMP characters use a double-character encoding.
   size_t char_offset = output->length();
-  output->resize(char_offset + CBU16_MAX_LENGTH);
-  CBU16_APPEND_UNSAFE(&(*output)[0], char_offset, code_point);
-  return CBU16_MAX_LENGTH;
+  output->resize(char_offset + U16_MAX_LENGTH);
+  U16_APPEND_UNSAFE(&(*output)[0], char_offset, code_point);
+  return U16_MAX_LENGTH;
 }
 
 // Generalized Unicode converter -----------------------------------------------

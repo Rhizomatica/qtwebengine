@@ -10,7 +10,7 @@
 #include "base/logging.h"
 #include "base/notreached.h"
 #include "base/strings/string_piece.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 
 namespace base {
 
@@ -234,7 +234,7 @@ inline static bool DoIsStringUTF8(StringPiece str) {
 
   while (char_index < src_len) {
     int32_t code_point;
-    CBU8_NEXT(src, char_index, src_len, code_point);
+    U8_NEXT(src, char_index, src_len, code_point);
     if (!Validator(code_point))
       return false;
   }

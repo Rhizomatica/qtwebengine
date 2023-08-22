@@ -11,7 +11,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/sys_string_conversions.h"
 #include "base/strings/utf_string_conversions.h"
-#include "base/third_party/icu/icu_utf.h"
+#include <unicode/utf.h>
 #include "build/build_config.h"
 #include "components/url_formatter/url_formatter.h"
 #include "net/base/filename_util.h"
@@ -167,7 +167,7 @@ bool TruncateFilename(base::FilePath* path, size_t limit) {
 #elif defined(OS_WIN)
   // UTF-16.
   DCHECK(name.size() > limit);
-  truncated = name.substr(0, CBU16_IS_TRAIL(name[limit]) ? limit - 1 : limit);
+  truncated = name.substr(0, U16_IS_TRAIL(name[limit]) ? limit - 1 : limit);
 #else
 // We cannot generally assume that the file name encoding is in UTF-8 (see
 // the comment for FilePath::AsUTF8Unsafe), hence no safe way to truncate.
